@@ -5,9 +5,6 @@ export type ReviewDocument = Review & Document;
 
 @Schema()
 export class Review {
-  @Prop()
-  _id: string;
-
   @Prop({ required: true })
   userName: string;
 

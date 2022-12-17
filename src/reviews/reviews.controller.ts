@@ -12,6 +12,7 @@ import { LocationsService } from './../locations/services/locations.service';
 import { ReviewDto } from './dto/review.dto';
 import { Param } from '@nestjs/common/decorators';
 import { ReviewResponse } from './interfaces/review.models';
+import { Review } from './schemas/review.schema';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -53,7 +54,7 @@ export class ReviewsController {
 
     if (existLocation) {
       const reviews = await this.reviewsService.getReviewsByLocationId(id);
-      return reviews.map((review) => ({
+      return reviews.map((review: Review & { _id: string }) => ({
         id: review._id,
         userName: review.userName,
         country: existLocation.locationName,
