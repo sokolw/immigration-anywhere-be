@@ -3,6 +3,8 @@ import { LocationDto } from './dto/location.dto';
 import { LocationsService } from './services/locations.service';
 import { LocationResponse } from './interfaces/location.models';
 import { Location } from './schemas/location.schema';
+import { HttpStatus } from '@nestjs/common/enums';
+import { HttpException } from '@nestjs/common/exceptions';
 
 type LocationBd = Location & { _id: string };
 
@@ -14,11 +16,18 @@ export class LocationsController {
   async create(
     @Body() locationDto: LocationDto,
   ): Promise<{ locationId: string }> {
-    return {
-      locationId: (
-        (await this.locationService.create(locationDto)) as LocationBd
-      )._id,
-    };
+    const locationExist = await this.locationService.getByLocationName(
+      locationDto.locationName,
+    );
+    if (!locationExist) {
+      return {
+        locationId: (
+          (await this.locationService.create(locationDto)) as LocationBd
+        )._id,
+      };
+    } else {
+      throw new HttpException('This location exist!', HttpStatus.CONFLICT);
+    }
   }
 
   @Get()

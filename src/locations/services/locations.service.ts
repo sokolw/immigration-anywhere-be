@@ -27,4 +27,12 @@ export class LocationsService {
       })
       .exec();
   }
+
+  async getByLocationName(name: string): Promise<Location | null> {
+    return this.locationModel
+      .findOne({
+        locationName: name,
+      })
+      .exec();
+  }
 }
