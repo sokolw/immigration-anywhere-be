@@ -7,10 +7,13 @@ import { LocationResponse } from './interfaces/location.models';
 export class LocationsController {
   constructor(private readonly locationService: LocationsService) {}
 
-  // delete it
   @Post()
-  async create(@Body() locationDto: LocationDto): Promise<LocationDto> {
-    return this.locationService.create(locationDto);
+  async create(
+    @Body() locationDto: LocationDto,
+  ): Promise<{ locationId: string }> {
+    return {
+      locationId: (await this.locationService.create(locationDto)).locationId,
+    };
   }
 
   @Get()

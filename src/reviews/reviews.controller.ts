@@ -22,28 +22,8 @@ export class ReviewsController {
   ) {}
 
   @Post()
-  async create(@Body() userReview: UserReviewDto): Promise<void> {
-    const existLocation = await this.locationsService.getByLocationId(
-      userReview.locationId,
-    );
-    console.log(existLocation);
-
-    if (existLocation) {
-      await this.reviewsService.create(this.createReviewDto(userReview));
-      return;
-    } else {
-      await this.locationsService.create({
-        locationId: userReview.locationId,
-        latitude: userReview.coordinates.latitude,
-        longitude: userReview.coordinates.longitude,
-        locationName: userReview.locationName,
-        countryId: userReview.countryId,
-      });
-      await this.reviewsService.create(this.createReviewDto(userReview));
-      return;
-    }
-
-    // return userReview;
+  async create(@Body() review: ReviewDto): Promise<Review> {
+    return this.reviewsService.create(review);
   }
 
   @Get(':id')
@@ -57,8 +37,6 @@ export class ReviewsController {
       return reviews.map((review: Review & { _id: string }) => ({
         id: review._id,
         userName: review.userName,
-        country: existLocation.locationName,
-        locationId: existLocation.locationId,
         rating: review.rating,
         reviewText: review.reviewText,
       }));
