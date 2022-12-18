@@ -23,7 +23,13 @@ export class ReviewsController {
 
   @Post()
   async create(@Body() review: ReviewDto): Promise<Review> {
-    return this.reviewsService.create(review);
+    const createdReview = await this.reviewsService.create(review);
+    return {
+      locationId: createdReview.locationId,
+      rating: createdReview.rating,
+      reviewText: createdReview.reviewText,
+      userName: createdReview.userName,
+    };
   }
 
   @Get(':id')
