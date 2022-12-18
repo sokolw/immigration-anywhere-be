@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
+import { Body, Controller, Post, Get, Query } from '@nestjs/common';
 import { LocationDto } from './dto/location.dto';
 import { LocationsService } from './services/locations.service';
 import { LocationResponse } from './interfaces/location.models';
@@ -28,6 +28,24 @@ export class LocationsController {
     } else {
       throw new HttpException('This location exist!', HttpStatus.CONFLICT);
     }
+  }
+
+  @Get()
+  async getLocation(@Query() query: any): Promise<{ locationId: string }> {
+    const { locationName, countryId } = query;
+    if (locationName && countryId) {
+      const locationExist =
+        await this.locationService.getByLocationNameAndCountryId(
+          locationName,
+          countryId,
+        );
+      if (locationExist) {
+        return {
+          locationId: (locationExist as LocationBd)._id,
+        };
+      }
+    }
+    throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
 
   @Get()

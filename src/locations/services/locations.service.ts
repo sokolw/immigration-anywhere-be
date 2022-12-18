@@ -35,4 +35,16 @@ export class LocationsService {
       })
       .exec();
   }
+
+  async getByLocationNameAndCountryId(
+    locationName: string,
+    countryId: string,
+  ): Promise<Location | null> {
+    return this.locationModel
+      .findOne({
+        locationName,
+        countryId,
+      })
+      .exec();
+  }
 }
