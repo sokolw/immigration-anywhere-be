@@ -2,9 +2,6 @@ import { IsString } from 'class-validator';
 
 export class LocationDto {
   @IsString()
-  locationId: string;
-
-  @IsString()
   latitude: string;
 
   @IsString()

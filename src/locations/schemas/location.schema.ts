@@ -5,9 +5,6 @@ export type LocationDocument = Location & Document;
 
 @Schema()
 export class Location {
-  @Prop({ required: true, unique: true })
-  locationId: string;
-
   @Prop({ required: true })
   latitude: string;
 
