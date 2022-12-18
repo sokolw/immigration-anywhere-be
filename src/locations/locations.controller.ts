@@ -31,6 +31,19 @@ export class LocationsController {
   }
 
   @Get()
+  async getAllLocations(): Promise<Array<LocationResponse>> {
+    return (await this.locationService.getAllLocations()).map<LocationResponse>(
+      (location: LocationBd) => ({
+        id: location._id,
+        coordinates: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
+      }),
+    );
+  }
+
+  @Get('location')
   async getLocation(@Query() query: any): Promise<{ locationId: string }> {
     const { locationName, countryId } = query;
     if (locationName && countryId) {
@@ -46,18 +59,5 @@ export class LocationsController {
       }
     }
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-  }
-
-  @Get()
-  async getAllLocations(): Promise<Array<LocationResponse>> {
-    return (await this.locationService.getAllLocations()).map<LocationResponse>(
-      (location: LocationBd) => ({
-        id: location._id,
-        coordinates: {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-      }),
-    );
   }
 }
